@@ -43,7 +43,6 @@ func atoi(s string) int {
 
 func isdigit(c int32) bool { return c >= '0' && c <= '9' }
 
-
 func firstDigitIndex(s string) int {
     return str.IndexFunc(s, isdigit)
 }
@@ -109,9 +108,7 @@ func toNum_part2(s string) int {
     x := firstDigitIndex(s)
     x0, rx := firstDigitWord(s)
 
-    if x < 0 {
-        first = rx 
-    } else if rx != "" && x0 < x {
+    if rx != "" && x0 < x {
         first = rx 
     } else {
         first = string(s[x])
@@ -119,16 +116,14 @@ func toNum_part2(s string) int {
 
     y := lastDigitIndex(s)
     y0, ry := lastDigitWord(s)
-    if y < 0 {
-        last = ry 
-    } else if ry != "" && y0 > y {
+    if ry != "" && y0 > y{
         last = ry 
     } else {
         last = string(s[y])
     }
 
     result := "" + first + last
-    fmt.Printf("toNum 2: %s -> %s\n", s, result)
+    // fmt.Printf("toNum 2: %s -> %s\n", s, result)
 
     return atoi(result)
 }
@@ -156,6 +151,4 @@ func main() {
 
     fmt.Printf("Part 1: %d\n", sum(nums_part1))
     fmt.Printf("Part 2: %d\n", sum(nums_part2))
-    //fmt.Printf("2bb:" + strconv.Itoa(toNum_part2("2bb")))
-    //fmt.Printf("eightwothree:" + strconv.Itoa(toNum_part2("eightwothree")))
 }
