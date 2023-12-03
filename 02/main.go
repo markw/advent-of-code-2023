@@ -7,12 +7,6 @@ import (
     msw "markw/lib"
 )
 
-func atoi(s string) int {
-    n, err := strconv.Atoi(s)
-    msw.Check(err)
-    return n
-}
-
 type RGB struct {
     red int
     green int
@@ -34,11 +28,11 @@ func isValidGame(g Game) bool {
 
 func max(ns []int) int {
     if len(ns) == 0 { panic("empty array") }
-    max := ns[0]
-    for _, n := range ns {
-        if n > max { max = n }
+    greaterOf := func(a,b int) int {
+        if b > a { return b } 
+        return a
     }
-    return max
+    return msw.Reduce(ns, greaterOf, ns[0])
 }
 
 func newGame(id int, sets []RGB) Game {
