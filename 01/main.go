@@ -28,8 +28,7 @@ var replacements = [][]string {
 }
 
 func sum(ns []int) int {
-    add := func (a int, b int) int { return a + b }
-    return msw.Reduce(ns, add, 0)
+    return msw.SumInt(ns)
 }
 
 func startsWith(s string, target string) bool {
