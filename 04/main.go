@@ -59,16 +59,38 @@ func score(card Card) int {
     return score
 }
 
-func processCards(originals, cards Cards) Cards {
-    var copies Cards
+type Node struct {
+    value int
+    next *Node
+}
+
+func addNode(tail *Node, n int) *Node {
+    next := &Node{n, nil}
+    tail.next = next
+    return next
+}
+
+func processCards(cards Cards) int {
+    head := &Node{-1, nil}
+    tail := head
     for _, card := range cards {
+        tail = addNode(tail, card.id - 1)
+    }
+    count := len(cards)
+    curr := head.next
+    for curr != nil {
+        card := cards[curr.value]
         if card.matches > 0 {
             i := card.id
             j := i + card.matches
-            copies = append(copies, originals[i:j]...)
+            for k := i; k < j; k++ {
+                tail = addNode(tail, k)
+                count++
+            }
         }
+        curr = curr.next
     }
-    return copies
+    return count
 }
 
 func main() {
@@ -76,14 +98,5 @@ func main() {
     cards := msw.Map(lines, parseCard)
     total := msw.SumInt(msw.Map(cards, score))
     fmt.Printf("Part 1: %d\n", total)
-
-    copies := cards
-    count := len(copies)
-    for len(copies) > 0 {
-        copies = processCards(cards, copies)
-        count += len(copies)
-    }
-    fmt.Printf("Part 2: %d\n", count)
+    fmt.Printf("Part 2: %d\n", processCards(cards))
 }
-
-
