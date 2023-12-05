@@ -4,7 +4,14 @@ import (
     "os" 
     str "strings"
     "reflect"
+    "strconv"
 )
+
+func ParseInt(s string) int {
+    n, err := strconv.Atoi(s)
+    Check(err)
+    return n
+}
 
 func Reduce[T, V any](ts []T, f func(V, T) V, initialValue V) V {
     accum := initialValue
@@ -61,3 +68,28 @@ func Eq(a any, b any) bool {
     return reflect.DeepEqual(a,b)
 }
 
+type Integer interface {
+    ~int | ~uint
+}
+
+func Min[T Integer] (ns []T) T {
+    if len(ns) == 0 { panic("empty array") }
+    min := ns[0]
+    for _, n := range ns {
+        if n < min {
+            min = n
+        }
+    }
+    return min
+}
+
+func Max[T Integer] (ns []T) T {
+    if len(ns) == 0 { panic("empty array") }
+    max := ns[0]
+    for _, n := range ns {
+        if n > max {
+            max = n
+        }
+    }
+    return max
+}
