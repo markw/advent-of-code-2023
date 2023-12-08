@@ -35,6 +35,14 @@ func Map[T, V any](ts []T, fn func(T) V) []V {
     return result
 }
 
+func MapCat[T, V any](ts []T, fn func(T) []V) []V {
+    result := make([]V, 0)
+    for _, t := range ts {
+        result = append(result, fn(t)...)
+    }
+    return result
+}
+
 func Filter[T any](ts []T, f func(T) bool) []T {
     result := make([]T, 0)
     for _, t := range ts {

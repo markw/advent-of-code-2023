@@ -141,19 +141,12 @@ func (r Range) partition(r0 Range) []Range {
 
 func (cm CategoryMap) partitionRanges(rs []Range) []Range {
     result := msw.Reduce(cm, func (accum []Range, mapping Mapping) []Range {
-        newRanges := []Range{}
-        for _, r := range accum {
-            partitions := r.partition(mapping.src)
-            newRanges = append(newRanges, partitions...)
-        }
-        return newRanges
+        return msw.MapCat(accum, func (r Range) []Range {
+            return r.partition(mapping.src)
+        })
     }, rs)
 
     return msw.Map(result, cm.mapSeedRange)
-}
-
-func (cm CategoryMap) partition (r Range) []Range {
-    return cm.partitionRanges([]Range{r})
 }
 
 func minLocationPart2(almanac Almanac) int {
