@@ -150,23 +150,14 @@ func (cm CategoryMap) partitionRanges(rs []Range) []Range {
 }
 
 func minLocationPart2(almanac Almanac) int {
-    mappedSeedRanges := []Range{}
-    for _, seedRange := range almanac.seedRanges() {
 
-        mapped := msw.Reduce(almanac.maps, func (accum []Range, cm CategoryMap) []Range {
+    mappedSeedRanges := msw.MapCat(almanac.seedRanges(), func (seedRange Range) []Range { 
+        return msw.Reduce(almanac.maps, func (accum []Range, cm CategoryMap) []Range { 
             return cm.partitionRanges(accum)
         }, []Range{seedRange})
+    })
 
-        mappedSeedRanges = append(mappedSeedRanges, mapped...)
-    }
-
-    minLocation := math.MaxInt32
-    for _, r := range mappedSeedRanges {
-        if r.low < minLocation {
-            minLocation = r.low
-        }
-    }
-    return minLocation
+    return msw.Min(msw.Map(mappedSeedRanges, func (r Range) int { return r.low }))
 }
 
 func main() {
