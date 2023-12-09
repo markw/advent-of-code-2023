@@ -5,6 +5,7 @@ import (
     str "strings"
     "reflect"
     "strconv"
+    "fmt"
 )
 
 func ParseInt(s string) int {
@@ -100,4 +101,45 @@ func Max[T Integer] (ns []T) T {
         }
     }
     return max
+}
+
+type Set[T comparable] struct {
+    _items map[T]struct{}
+}
+
+func NewSet[T comparable]() *Set[T] {
+    set := &Set[T]{}
+    set._items = make(map[T]struct{})
+    return set
+}
+
+func (set *Set[T]) Add(items ...T) *Set[T] {
+    for _, item := range items {
+        set._items[item] = struct{}{}
+    }
+    return set
+}
+
+func (set Set[T]) Size() int { return len(set._items) }
+
+func (set Set[T]) Items() []T {
+    result := make([]T, len(set._items))
+    i := 0
+    for k := range set._items { 
+        result[i] = k 
+        i++
+    }
+    return result
+}
+
+func (set Set[T]) String() string {
+    comma := false
+    result := "{"
+    for _,item := range set.Items() {
+        if comma { result += "," }
+        result += fmt.Sprintf("%v", item)
+        comma = true
+    }
+    result += "}"
+    return result
 }
