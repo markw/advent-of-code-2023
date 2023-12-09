@@ -10,11 +10,10 @@ type Steps struct {
     i int
 }
 
-func (steps *Steps) next() rune {
-    if steps.i >= len(steps.s) { steps.i = 0 }
-    next := rune(steps.s[steps.i])
-    steps.i++
-    return next
+func (st *Steps) next() rune {
+    index := st.i % len(st.s)
+    st.i++
+    return rune(st.s[index])
 }
 
 type Pair struct {

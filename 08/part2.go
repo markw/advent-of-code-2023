@@ -8,15 +8,16 @@ import (
 
 type Steps struct {
     s string
-    i int
+    count int
 }
 
-func (steps *Steps) next() rune {
-    if steps.i >= len(steps.s) { steps.i = 0 }
-    next := rune(steps.s[steps.i])
-    steps.i++
-    return next
+func (st *Steps) next() rune {
+    index := st.count % len(st.s)
+    st.count++
+    return rune(st.s[index])
 }
+func (st Steps) index() int { return st.count % len(st.s) }
+func (st Steps) taken() int { return st.count }
 
 type Pair struct {
     left, right string
@@ -55,7 +56,6 @@ func lcm(ns []int) int {
 }
 
 func traverse(start, end string, network Network, steps Steps) int {
-    result := 1
     curr := start
     visited := make(map[string]bool)
     for curr != end {
@@ -64,10 +64,10 @@ func traverse(start, end string, network Network, steps Steps) int {
         next := node.left
         if step == 'R' { next = node.right }
         if next == end {
-            return result
+            return steps.taken()
         }
         // cycle detection
-        key := fmt.Sprintf("%s-%d", next, result % len(steps.s))
+        key := fmt.Sprintf("%s-%d", next, steps.index())
         if visited[key] == true {
             // fmt.Printf("%s -> %s: cycle at step %d, key %s\n", start, end, result, key)
             break
@@ -76,7 +76,6 @@ func traverse(start, end string, network Network, steps Steps) int {
         // end cycle detection
 
         curr = next
-        result++
     }
     return 0
 }
