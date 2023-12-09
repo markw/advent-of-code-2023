@@ -13,7 +13,7 @@ func allZeroes(ns []int) bool {
     return true
 }
 
-func diffs(ns []int) []int {
+func diffsForSeq(ns []int) []int {
     result := make([]int, len(ns) - 1)
     for i := 0; i < len(result); i++ {
         result[i] = ns[i+1] - ns[i]
@@ -25,7 +25,8 @@ func buildDiffs(ns []int) [][]int {
     diffSeqs := make([][]int, 1)
     diffSeqs[0] = ns
     for !allZeroes(diffSeqs[0]) {
-        diffSeqs = append([][]int{diffs(diffSeqs[0])}, diffSeqs...)
+        nextDiffs := diffsForSeq(diffSeqs[0])
+        diffSeqs = append([][]int{nextDiffs}, diffSeqs...)
     }
     return diffSeqs
 }
