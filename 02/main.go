@@ -2,7 +2,6 @@ package main
 
 import (
     "fmt"
-    "strconv"
     str "strings"
     msw "markw/lib"
 )
@@ -83,9 +82,9 @@ func main() {
     games := msw.Map(lines, parseGame)
     validGames := msw.Filter(games, isValidGame)
     addGameId := func(accum int, g Game) int { return accum + g.id }
-    fmt.Println("Part 1: " + strconv.Itoa(msw.Reduce(validGames, addGameId, 0)))
+    fmt.Printf("Part 1: %d\n", msw.Reduce(validGames, addGameId, 0))
 
     powers := msw.Map(games, func(g Game) int { return g.power() })
     plus := func(a, b int) int { return a + b }
-    fmt.Println("Part 2: " + strconv.Itoa(msw.Reduce(powers, plus, 0)))
+    fmt.Printf("Part 2: %d\n", msw.Reduce(powers, plus, 0))
 }
